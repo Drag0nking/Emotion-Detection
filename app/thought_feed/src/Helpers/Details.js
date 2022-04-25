@@ -1,24 +1,9 @@
-import axios from 'axios';
-import {useState,useEffect} from 'react'
 
-
+import Cookies from 'js-cookie';
 //used to get username from django restAPI
 const Details=()=>{
 
-const [data,setData]=useState([]);
-    useEffect(()=>{
- getData();
-},[]);
-
-const getData=()=>{
-    axios.get('http://localhost:8000/thought/wel/')
-    .then(res => {
-        setData(res.data); 
-        });
-    }
-   
-    return data;
-
+    return JSON.parse(Cookies.get('uname').split('\\').join(''));
 };
     
 export default Details

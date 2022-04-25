@@ -27,7 +27,8 @@ const CommentInputBox=({id})=>{
         }
         
     }
-
+   
+    
     return(
         <div className="comment_input">
                 <textarea

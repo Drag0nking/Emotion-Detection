@@ -6,17 +6,18 @@ import db from "../../Helpers/firebase";
 import Avatar from '@mui/material/Avatar';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import "./LikePost.css"
-import axios from "axios";
-
+import Details from "../../Helpers/Details";
 const LikePost=({id,avatar})=>{
     const [numLikes,setLikes]=useState(0);
     const [isLiked,toggleLike]=useState(false);
     const [usersArray,setUsersArray]=useState([]);
     const [isOpen,setOpen]=useState(()=>false);
-    const [username,setUsername]=useState("");
+    const [username,setUsername]=useState();
+    
     //for getting users who liked from firebase
     //called only once before loading
     useEffect(() => {
+        setUsername(Details().name);
         const docRef=doc(db,"posts",id);
         const snap=onSnapshot(docRef,(ss)=>{
             setUsersArray(ss.data().likes);
@@ -27,13 +28,7 @@ const LikePost=({id,avatar})=>{
       }, []);
       //getting name from django using  RESTAPI 
       //called once before loading
-    useEffect(()=>{
-    axios.get('http://localhost:8000/thought/wel/')
-    .then(res => {
-        setUsername(res.data.name); 
-        
-        });
-    },[]);
+    
     //toggling liked post after getting username
     //called everytime username or usersArray
     useEffect(()=>{

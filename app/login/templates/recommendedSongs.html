@@ -1,5 +1,17 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
 <style>
+  .aTagButton {
+    display: block;
+
+    height: 40px;
+    background: #4e9caf;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    line-height: 25px;
+  }
   * {
     box-sizing: border-box;
   }
@@ -12,7 +24,7 @@
   }
   img {
     vertical-align: middle;
-    height: 700px;
+    height: 500px;
   }
 
   /* Slideshow container */
@@ -51,11 +63,10 @@
     background-color: rgba(0, 0, 0, 0.8);
   }
 
-  /* Caption text */
   .text {
     color: black;
-    font-size: 60px;
-    padding: 8px 12px;
+    font-size: 47px;
+    padding: 4px 5px;
 
     text-align: center;
   }
@@ -121,11 +132,14 @@
 
   <br />
   <div class="slideshow-container">
-    {% for song, url in songs %}
+    {% for song, url,artist in songs %}
     <div class="mySlides fade">
       <center><img src="{{url}}" /></center>
 
       <div class="text">{{song}}</div>
+      <a target="_blank" class="aTagButton" href="{{artist}}"
+        >Play <strong>{{song}}</strong>
+      </a>
     </div>
     {% endfor %}
     <a class="prev" onclick="plusSlides(-1)">❮</a>

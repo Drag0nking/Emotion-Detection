@@ -1,9 +1,12 @@
 import imp
+import json
+from urllib import response
 from django.shortcuts import render,redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 import pandas as pd
+import pywhatkit
 from auth.settings import BASE_DIR
 from login.models import UsersMood
 from .forms import CreateUserForm
@@ -11,8 +14,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.http import StreamingHttpResponse
 from login.emotion_detection import Emotion_detection
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from thought_feed import views
 # Create your views here.
 
@@ -58,12 +59,14 @@ def registerView(request):
 
 def loginView(request): 
     if request.user.is_authenticated:
-        return redirect('dashboard')
+    
+        response = redirect('dashboard')
+        return response
     else:
         if request.method == "POST" :
             username = request.POST.get('username')
             password = request.POST.get('password')
-
+          
             user = authenticate(request, username=username, password=password)
 
             if user is not None:
@@ -72,9 +75,10 @@ def loginView(request):
             else:
                 messages.info(request, 'Username or Password is Incorrect!')
         
-        context ={}
-
-        return render(request,'login.html',context)
+        
+        response =render(request,'login.html')
+        
+        return response
         
 def logoutView(request): 
     logout(request)
@@ -114,6 +118,7 @@ def recSongs(request):
     songs=[]
     url=[]
     num=[]
+    vid=[]
     usrMood=UsersMood.objects.get(username=request.user).mood
     userMoodFile="data/"+usrMood+".pkl" 
     print("USER'S MOOD IS "+usrMood)
@@ -123,7 +128,10 @@ def recSongs(request):
     for i in df.sample(5).index:
         songs.append(df["name"][i])
         url.append(df["url"][i])
+        yt=pywhatkit.playonyt(df["name"][i]+" "+df['artists_song'][i],open_video=False)
+        vid.append(yt)
+        print(yt)   
         num.append(numb)
         numb+=1
-    zipped=zip(songs,url)
+    zipped=zip(songs,url,vid)
     return render(request,'recommendedSongs.html',{"songs":zipped,"num":num})

@@ -12,6 +12,7 @@ urlpatterns =  [
     path('facecam_feed',views.facecam_feed,name="facecam_feed"),
     path('stopFeed',views.stopFeed,name="stopFeed"),
     path('recommendSongs/',views.recSongs,name="recommendSongs"),
+  
 
    
     # path('disableCamera/', views.disableCamera, name='disableCamera'),
